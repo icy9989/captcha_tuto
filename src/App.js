@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import react, { Component } from 'react';
+import { getAuth, RecaptchaVerifier } from "firebase/auth";
+import { app } from "./firebaseConfig";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const auth = getAuth(app);
+class App extends Component {
+
+  captchaVerify = () => {
+      window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+        'size': 'normal',
+        'callback': (response) => {
+          console.log(response)
+        },
+        'expired-callback': () => {
+          // Response expired. Ask user to solve reCAPTCHA again.
+          // ...
+        }
+    } , auth);
+    window.recaptchaVerifier.render()
+  }
+
+  componentDidMount () {
+    this.captchaVerify();
+  }
+
+  render() {
+    return (
+      <>
+        <label>Phone Number</label>
+        <input />
+        <div id="recaptcha-container" />
+        <button id="sign-in-button">Send Code</button>
+      </>
+    );
+  }
 }
+
+
 
 export default App;
