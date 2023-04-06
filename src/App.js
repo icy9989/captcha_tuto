@@ -8,23 +8,24 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      input : ""
+      input: ""
     };
   }
   captchaVerify = () => {
-      window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-        'size': 'normal',
-        'callback': (response) => {
-        },
-        'expired-callback': () => {
-          // Response expired. Ask user to solve reCAPTCHA again.
-          // ...
-        }
-    } , auth);
+    window.recaptchaVerifier = new RecaptchaVerifier('sign-in-button', {
+      'size': 'invisible',
+      'callback': (response) => {
+        window.Captcha.postMessage(response)
+      },
+      'expired-callback': () => {
+        // Response expired. Ask user to solve reCAPTCHA again.
+        // ...
+      }
+    }, auth);
     window.recaptchaVerifier.render()
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.captchaVerify();
   }
 
@@ -37,8 +38,8 @@ class App extends Component {
   render() {
     return (
       <>
-        <label>Phone Number</label>
-        <input type="text" placeholder="phone number" value={this.state.input} onChange={(e)=>this.changeInput(e.target.value)} />
+        {/* <label>Phone Number</label> */}
+        {/* <input type="text" placeholder="phone number" value={this.state.input} onChange={(e) => this.changeInput(e.target.value)} /> */}
         <div id="recaptcha-container" />
         <button id="sign-in-button">Send Code</button>
       </>
